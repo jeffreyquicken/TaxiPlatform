@@ -3,6 +3,9 @@ import herepy
 import json
 import datetime
 
+#CONS
+MARGIN = 300
+
 # API key (in config.ini)
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -30,16 +33,30 @@ def get_traveltime(start_address, end_address):
     seconds = response.response['route'][0]['summary']['travelTime']
     return seconds
 
-def get_routetime(stops, margin = 300):
+
+def get_routetime(stops):
     totalTime = 0
     for i in range(0, len(stops)-1):
         print(i)
         traveltime = get_traveltime(stops[i], stops[i+1])
         print(traveltime)
         totalTime += traveltime
-    return totalTime + (len(stops)-2)*300   # margin for intermediary stops
+        print(totalTime)
+    return totalTime + (len(stops)-2)*MARGIN   # margin for intermediary stops
+
 
 def sec_to_hms(sec):
     return str(datetime.timedelta(seconds=sec))
 
-print(sec_to_hms(get_routetime(['koningin astridlaan 10 helchteren', 'emiel verhaerenstraat 133 leopoldsburg', 'koningin astridlaan 10 helchteren' ])))
+
+def hms_to_sec(hms):
+    h, m, s = hms.split(':')
+    totalSeconds = int(h) * 3600 + int(m) * 60 + int(s)
+    return totalSeconds
+
+
+def get_arrival_time(stops, depart_time):
+    time = hms_to_sec(depart_time)
+    delta = get_routetime(stops)
+    return time + delta
+
