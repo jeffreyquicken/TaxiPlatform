@@ -103,4 +103,5 @@ ISIN(MORNINGSTAR).txt
 venv/
 .DS_Store
 config.ini
+.idea/
 # End of https://www.toptal.com/developers/gitignore/api/pycharm
